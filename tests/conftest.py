@@ -68,5 +68,8 @@ def clients() -> Generator[dict[str, FakeNlbClient]]:
         client.password = password
         return client
 
-    with patch("custom_components.nlb.create_client", side_effect=factory):
+    with (
+        patch("custom_components.nlb.create_client", side_effect=factory),
+        patch("custom_components.nlb.config_flow.create_client", side_effect=factory),
+    ):
         yield created

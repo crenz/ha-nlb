@@ -51,7 +51,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
 
 ## Phase 3: Features
 
-- [ ] **T5: Config flow, multi-account** (M)
+- [x] **T5: Config flow, multi-account** (M)
   - Acceptance:
     - User step takes user ID + password, validates via client, creates entry titled `NLB <user_id>`
     - Unique ID = normalised user ID; duplicate aborts `already_configured`

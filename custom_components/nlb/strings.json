@@ -1,4 +1,23 @@
 {
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add an NLB account",
+        "description": "Enter the NLB user ID and password of the account to monitor. Add the integration again to add more accounts.",
+        "data": {
+          "user_id": "User ID",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid user ID or password.",
+      "cannot_connect": "Could not connect to NLB."
+    },
+    "abort": {
+      "already_configured": "This NLB account is already configured."
+    }
+  },
   "entity": {
     "sensor": {
       "loans": { "name": "Loans" },
