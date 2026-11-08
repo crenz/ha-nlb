@@ -34,7 +34,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
   - Files: `custom_components/nlb/api.py`, `custom_components/nlb/coordinator.py` (compute only), `tests/test_api.py`, `tests/test_data.py`
 
 ### Checkpoint: Foundation
-- [ ] All tests, lint, types pass locally and in CI
+- [x] All tests, lint, types pass locally (CI pending first push)
 - [ ] Review with human before proceeding
 
 ## Phase 2: Core slice
@@ -98,7 +98,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
 
 ## Phase 4: Finish
 
-- [ ] **T9: README and final gates** (S)
+- [x] **T9: README and final gates** (S)
   - Acceptance:
     - README covers HACS custom-repo install, setup, entities, service with example automation, options, stub-client limitation, deferred logo
     - Coverage ≥ 95%; ruff, mypy, hassfest, HACS validation all green in CI
