@@ -2,13 +2,21 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
+
+import pytest
 from homeassistant import config_entries
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.core import HomeAssistant
-from homeassistant.data_entry_flow import FlowResultType
+from homeassistant.data_entry_flow import FlowResultType, InvalidData
 from homeassistant.helpers import device_registry as dr
 
-from custom_components.nlb.const import CONF_PASSWORD, CONF_USER_ID, DOMAIN
+from custom_components.nlb.const import (
+    CONF_PASSWORD,
+    CONF_POLL_HOURS,
+    CONF_USER_ID,
+    DOMAIN,
+)
 
 from .conftest import FakeNlbClient
 
@@ -106,4 +114,44 @@ async def test_two_accounts_create_two_devices(
     for entry in entries:
         assert registry.async_get_device_by_identifier(
             (DOMAIN, entry.unique_id), entry.entry_id
+        )
+
+
+async def _loaded_entry(hass: HomeAssistant, clients: dict[str, FakeNlbClient]):
+    result = await _submit(hass, (await _start(hass))["flow_id"], "alice", "secret")
+    await hass.async_block_till_done()
+    return result["result"]
+
+
+async def test_options_flow_changes_poll_interval(
+    hass: HomeAssistant, clients: dict[str, FakeNlbClient]
+) -> None:
+    entry = await _loaded_entry(hass, clients)
+    assert entry.runtime_data.coordinator.update_interval == timedelta(hours=12)
+
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "init"
+
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"], {CONF_POLL_HOURS: 6}
+    )
+    await hass.async_block_till_done()
+
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert entry.options == {CONF_POLL_HOURS: 6}
+    assert entry.state is ConfigEntryState.LOADED
+    assert entry.runtime_data.coordinator.update_interval == timedelta(hours=6)
+
+
+@pytest.mark.parametrize("hours", [0, 169])
+async def test_options_flow_rejects_out_of_range_interval(
+    hass: HomeAssistant, clients: dict[str, FakeNlbClient], hours: int
+) -> None:
+    entry = await _loaded_entry(hass, clients)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+
+    with pytest.raises(InvalidData):
+        await hass.config_entries.options.async_configure(
+            result["flow_id"], {CONF_POLL_HOURS: hours}
         )

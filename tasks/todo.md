@@ -76,7 +76,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
   - Depends on: T4 (check current HA service-response docs before coding)
   - Files: `__init__.py`, `services.yaml`, `strings.json`, `translations/en.json`, `tests/test_services.py`
 
-- [ ] **T7: Options flow: poll interval** (S)
+- [x] **T7: Options flow: poll interval** (S)
   - Acceptance:
     - Options flow sets interval in hours (1-168, default 12) per entry; invalid values rejected
     - Change applies without restart (update listener updates coordinator interval)

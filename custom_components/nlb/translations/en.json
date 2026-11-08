@@ -36,5 +36,18 @@
       "name": "Renew all loans",
       "description": "Renews every renewable loan of the selected NLB accounts. Without a target, all accounts are renewed. Returns per-item results."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "NLB account options",
+        "data": {
+          "poll_hours": "Update interval (hours)"
+        },
+        "data_description": {
+          "poll_hours": "How often to fetch loans from NLB. Between 1 and 168 hours."
+        }
+      }
+    }
   }
 }
