@@ -39,13 +39,13 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
 
 ## Phase 2: Core slice
 
-- [ ] **T4: Coordinator and sensors for one account** (M)
+- [x] **T4: Coordinator and sensors for one account** (M)
   - Acceptance:
     - `NlbCoordinator` fetches loans via the client (default interval 12 h), maps `NlbAuthError` to `ConfigEntryAuthFailed`, `NlbConnectionError` to `UpdateFailed`
     - Entry setup stores client + coordinator in `runtime_data` and forwards the sensor platform
     - Device `(DOMAIN, user_id)` with three sensors (`loans`, `overdue_loans`, `days_until_next_due`), translated names, unique IDs `<user_id>_<key>`
     - Unload removes entities cleanly
-  - Verify: `pytest tests/test_coordinator.py tests/test_sensor.py` using `MockConfigEntry` and the fake client; states match computed data; auth failure starts reauth
+  - Verify: `pytest tests/test_coordinator.py tests/test_sensor.py` using `MockConfigEntry` and the fake client; states match computed data; auth failure fails setup (the reauth flow itself is T8)
   - Depends on: T3
   - Files: `coordinator.py`, `entity.py`, `sensor.py`, `__init__.py`, `strings.json`, `translations/en.json` (+ tests)
 

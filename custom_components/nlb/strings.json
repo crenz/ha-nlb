@@ -1,0 +1,9 @@
+{
+  "entity": {
+    "sensor": {
+      "loans": { "name": "Loans" },
+      "overdue_loans": { "name": "Overdue loans" },
+      "days_until_next_due": { "name": "Days until next due" }
+    }
+  }
+}
