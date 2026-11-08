@@ -65,7 +65,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
 - [ ] Add two accounts via the flow in tests; each has three correct sensors
 - [ ] All gates green; review with human
 
-- [ ] **T6: `nlb.renew_all` service** (M)
+- [x] **T6: `nlb.renew_all` service** (M)
   - Acceptance:
     - `services.yaml` with optional `device_id` target; registered once in `async_setup`, `SupportsResponse.OPTIONAL`
     - With device target renews only that account; without target renews all loaded accounts
