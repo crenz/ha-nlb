@@ -24,7 +24,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
   - Depends on: T1
   - Files: `custom_components/nlb/{manifest.json,const.py,__init__.py}`, `hacs.json`, `tests/{conftest.py,test_init.py}`
 
-- [ ] **T3: Client protocol, stub, data computation** (M)
+- [x] **T3: Client protocol, stub, data computation** (M)
   - Acceptance:
     - `api.py`: `Loan`, `RenewItemResult`, `NlbAuthError`, `NlbConnectionError`, `NlbClient` protocol, `StubNlbClient`, `create_client()` factory
     - Pure `compute_data(loans, today)` returns loans, overdue, days_until_next_due (next upcoming, overdue ignored, `None` if none)
