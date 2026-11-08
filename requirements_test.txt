@@ -1,0 +1,5 @@
+# Pin the HA test package; it pins the matching Home Assistant version.
+pytest-homeassistant-custom-component==0.13.375
+pytest-cov==7.1.0
+ruff==0.17.4
+mypy==2.4.1
