@@ -10,6 +10,7 @@ from homeassistant.config_entries import ConfigEntryState
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType, InvalidData
 from homeassistant.helpers import device_registry as dr
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from custom_components.nlb.const import (
     CONF_PASSWORD,
@@ -155,3 +156,63 @@ async def test_options_flow_rejects_out_of_range_interval(
         await hass.config_entries.options.async_configure(
             result["flow_id"], {CONF_POLL_HOURS: hours}
         )
+
+
+async def _failed_entry(
+    hass: HomeAssistant, clients: dict[str, FakeNlbClient]
+) -> MockConfigEntry:
+    clients["alice"] = FakeNlbClient("alice")
+    clients["alice"].auth_error = True
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        unique_id="alice",
+        data={CONF_USER_ID: "alice", CONF_PASSWORD: "old"},
+    )
+    entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+    return entry
+
+
+async def test_auth_failure_starts_reauth_flow(
+    hass: HomeAssistant, clients: dict[str, FakeNlbClient]
+) -> None:
+    await _failed_entry(hass, clients)
+
+    flows = hass.config_entries.flow.async_progress_by_handler(DOMAIN)
+
+    assert [f["context"]["source"] for f in flows] == ["reauth"]
+    assert flows[0]["step_id"] == "reauth_confirm"
+
+
+async def test_reauth_updates_password_and_reloads(
+    hass: HomeAssistant, clients: dict[str, FakeNlbClient]
+) -> None:
+    entry = await _failed_entry(hass, clients)
+    flow = hass.config_entries.flow.async_progress_by_handler(DOMAIN)[0]
+    clients["alice"].auth_error = False
+
+    result = await hass.config_entries.flow.async_configure(
+        flow["flow_id"], {CONF_PASSWORD: "new"}
+    )
+    await hass.async_block_till_done()
+
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "reauth_successful"
+    assert entry.data == {CONF_USER_ID: "alice", CONF_PASSWORD: "new"}
+    assert entry.state is ConfigEntryState.LOADED
+
+
+async def test_reauth_with_wrong_password_shows_error(
+    hass: HomeAssistant, clients: dict[str, FakeNlbClient]
+) -> None:
+    entry = await _failed_entry(hass, clients)
+    flow = hass.config_entries.flow.async_progress_by_handler(DOMAIN)[0]
+
+    result = await hass.config_entries.flow.async_configure(
+        flow["flow_id"], {CONF_PASSWORD: "still-wrong"}
+    )
+
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {"base": "invalid_auth"}
+    assert entry.data[CONF_PASSWORD] == "old"

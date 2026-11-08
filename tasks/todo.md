@@ -84,7 +84,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
   - Depends on: T5
   - Files: `config_flow.py`, `coordinator.py` or `__init__.py`, `strings.json`, `translations/en.json`, tests
 
-- [ ] **T8: Reauth flow** (S)
+- [x] **T8: Reauth flow** (S)
   - Acceptance:
     - `ConfigEntryAuthFailed` surfaces a reauth flow asking for a new password
     - Valid password updates the entry and reloads; invalid shows `invalid_auth`; user ID cannot change

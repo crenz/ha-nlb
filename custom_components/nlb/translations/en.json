@@ -8,6 +8,13 @@
           "user_id": "User ID",
           "password": "Password"
         }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate NLB account",
+        "description": "NLB rejected the stored password for {user_id}. Enter the current password.",
+        "data": {
+          "password": "Password"
+        }
       }
     },
     "error": {
@@ -15,7 +22,8 @@
       "cannot_connect": "Could not connect to NLB."
     },
     "abort": {
-      "already_configured": "This NLB account is already configured."
+      "already_configured": "This NLB account is already configured.",
+      "reauth_successful": "Re-authentication was successful."
     }
   },
   "entity": {
