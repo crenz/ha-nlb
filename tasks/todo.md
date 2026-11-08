@@ -5,7 +5,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
 
 ## Phase 1: Foundation
 
-- [ ] **T1: Tooling and CI** (S)
+- [x] **T1: Tooling and CI** (S)
   - Acceptance:
     - `pyproject.toml` configures ruff, mypy (strict for `custom_components/nlb`), pytest (asyncio auto) and coverage threshold 95
     - `requirements_test.txt` pins `pytest-homeassistant-custom-component` and tooling
@@ -15,7 +15,7 @@ Commands: `pytest tests/ --cov=custom_components.nlb --cov-report=term-missing` 
   - Depends on: none
   - Files: `pyproject.toml`, `requirements_test.txt`, `.gitignore`, `.github/workflows/ci.yml`
 
-- [ ] **T2: Loadable empty integration** (S)
+- [x] **T2: Loadable empty integration** (S)
   - Acceptance:
     - `manifest.json` (domain `nlb`, `config_flow: true`, `iot_class: cloud_polling`, `requirements: []`), `hacs.json`, `const.py`
     - `async_setup_entry` / `async_unload_entry` succeed with a `MockConfigEntry` and no platforms
